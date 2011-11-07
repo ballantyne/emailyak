@@ -1,7 +1,7 @@
 require 'cgi'
 require 'set'
 
-require 'rubygems'
+require 'rubygems' 
 require 'yajl'
 require 'openssl'
 require 'rest_client'
@@ -94,8 +94,8 @@ module EmailYak
   end
   
   module Address
-    def self.register(params={})
-      EmailYak.request(:post, 'register/address/', nil, params)
+    def self.register(address, push=true)
+      EmailYak.request(:post, 'register/address/', nil, {"PushEmail" => push, "Address" =>  address})
     end
   end
   
@@ -134,11 +134,8 @@ module EmailYak
       headers = { :params => params }.merge(headers)
       payload = nil
     else
-      
-      
       headers = {:content_type => 'application/json'}
       payload = Yajl::Encoder.encode(params)
-      puts payload
     end
     opts = {
       :method => method,
@@ -149,7 +146,6 @@ module EmailYak
       :payload => payload,
       :timeout => 80
     }.merge(ssl_opts)
-    # puts params.inspect
     begin
       response = execute_request(opts)
     rescue SocketError => e

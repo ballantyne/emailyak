@@ -94,8 +94,8 @@ module EmailYak
   end
   
   module Address
-    def self.register(address, push=true)
-      EmailYak.request(:post, 'register/address/', nil, {"PushEmail" => push, "Address" =>  address})
+    def self.register(address, callback_url, push=true)
+      EmailYak.request(:post, 'register/address/', nil, {"PushEmail" => push, "Address" =>  address, "CallbackURL" => callback_url})
     end
   end
   

@@ -135,7 +135,7 @@ module EmailYak
       payload = nil
     else
       headers = {:content_type => 'application/json'}
-      payload = JSON.encode(params)
+      payload = params.to_json
     end
     opts = {
       :method => method,

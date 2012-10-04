@@ -135,7 +135,7 @@ module EmailYak
       payload = nil
     else
       headers = {:content_type => 'application/json'}
-      payload = params.to_json
+      payload = JSON.generate(params)
     end
     opts = {
       :method => method,
@@ -172,7 +172,7 @@ module EmailYak
     rbody = response.body
     rcode = response.code
     begin
-      resp = JSON::Pure::Parser.parse(rbody)
+      resp = JSON.parse(rbody)
     rescue
       raise APIError.new("Invalid response object from API: #{rbody.inspect} (HTTP response code was #{rcode})")
     end

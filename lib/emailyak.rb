@@ -5,6 +5,7 @@ require 'rubygems'
 require 'json/pure'
 require 'openssl'
 require 'rest_client'
+require 'ostruct'
 
 # A lot of the structure here is borrowed from the Stripe Ruby
 # bindings (https://github.com/stripe/stripe-ruby).

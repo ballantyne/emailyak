@@ -2,7 +2,7 @@ require 'cgi'
 require 'set'
 
 require 'rubygems' 
-require 'yajl'
+require 'json/pure'
 require 'openssl'
 require 'rest_client'
 
@@ -135,7 +135,7 @@ module EmailYak
       payload = nil
     else
       headers = {:content_type => 'application/json'}
-      payload = Yajl::Encoder.encode(params)
+      payload = JSON.encode(params)
     end
     opts = {
       :method => method,
@@ -172,7 +172,7 @@ module EmailYak
     rbody = response.body
     rcode = response.code
     begin
-      resp = Yajl::Parser.parse(rbody)
+      resp = JSON::Pure::Parser.parse(rbody)
     rescue
       raise APIError.new("Invalid response object from API: #{rbody.inspect} (HTTP response code was #{rcode})")
     end

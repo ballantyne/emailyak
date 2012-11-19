@@ -1,8 +1,7 @@
 require 'cgi'
 require 'set'
 
-require 'rubygems' 
-require 'json/pure'
+require 'multi_json'
 require 'openssl'
 require 'rest_client'
 require 'ostruct'
@@ -10,8 +9,8 @@ require 'ostruct'
 # A lot of the structure here is borrowed from the Stripe Ruby
 # bindings (https://github.com/stripe/stripe-ruby).
 
-# Further adapted from https://github.com/gdb/emailyak-ruby 
-# because I couldn't get it to install on heroku and 
+# Further adapted from https://github.com/gdb/emailyak-ruby
+# because I couldn't get it to install on heroku and
 # I wanted to add to it
 
 module EmailYak
@@ -32,7 +31,7 @@ module EmailYak
       end
     end
   end
-  
+
   def self.docs(url=self.api_docs_url)
     begin
     puts "opening api docs at #{self.api_docs_url} "
@@ -42,7 +41,7 @@ module EmailYak
     end
     true
   end
-  
+
   def self.api_docs_url
     "http://docs.emailyak.com/"
   end
@@ -72,40 +71,40 @@ module EmailYak
     def self.all(params={})
       EmailYak.request(:get, 'get/all/email/', nil, params)
     end
-    
+
     def self.get(params={})
       EmailYak.request(:get, 'get/email/', nil, params)
     end
-    
+
     def self.list(params={})
       EmailYak.request(:get, 'get/email/list/', nil, params)
     end
-    
+
     def self.new(params={})
       EmailYak.request(:get, 'get/new/email/', nil, params)
     end
-    
+
     def self.send(params={})
       EmailYak.request(:post, 'send/email/', nil, params)
     end
-    
+
     def self.delete(params={})
       EmailYak.request(:post, 'delete/email/', nil, params)
     end
   end
-  
+
   module Address
     def self.register(address, callback_url, push=true)
       EmailYak.request(:post, 'register/address/', nil, {"PushEmail" => push, "Address" =>  address, "CallbackURL" => callback_url})
     end
   end
-  
+
   module Domain
     def self.register(params={})
       EmailYak.request(:post, 'register/domain/', nil, params)
     end
   end
-  
+
   def self.request(method, url, api_key, params=nil, headers={})
     api_key ||= @@api_key
     raise EmailYakError.new('No API key provided.  (HINT: set your API key using "EmailYak.api_key = <API-KEY>".') unless api_key
@@ -136,7 +135,7 @@ module EmailYak
       payload = nil
     else
       headers = {:content_type => 'application/json'}
-      payload = JSON.generate(params)
+      payload = MultiJson.dump(params)
     end
     opts = {
       :method => method,
@@ -173,7 +172,7 @@ module EmailYak
     rbody = response.body
     rcode = response.code
     begin
-      resp = JSON.parse(rbody)
+      resp = MultiJson.load(rbody)
     rescue
       raise APIError.new("Invalid response object from API: #{rbody.inspect} (HTTP response code was #{rcode})")
     end

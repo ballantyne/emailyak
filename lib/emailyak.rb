@@ -1,6 +1,6 @@
 require 'cgi'
 require 'set'
-
+require 'rubygems' 
 require 'multi_json'
 require 'openssl'
 require 'rest_client'

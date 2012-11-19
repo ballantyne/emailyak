@@ -2,7 +2,7 @@ require 'cgi'
 require 'set'
 
 require 'rubygems' 
-require 'json/pure'
+require 'multi_json'
 require 'openssl'
 require 'rest_client'
 require 'ostruct'

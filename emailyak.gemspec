@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
   s.add_dependency(%q<rest-client>, [">= 0"])
-  s.add_dependency('json_pure', '>= 0')
+  s.add_dependency('multi_json', '>= 1.3.7')
 end
